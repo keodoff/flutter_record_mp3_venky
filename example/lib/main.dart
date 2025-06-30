@@ -92,9 +92,7 @@ class _MyAppState extends State<MyApp> {
           ),
           GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: () {
-              play();
-            },
+            onTap: () {},
             child: Container(
               margin: EdgeInsets.only(top: 30),
               alignment: AlignmentDirectional.center,
@@ -129,10 +127,12 @@ class _MyAppState extends State<MyApp> {
       statusText = "Recording...";
       recordFilePath = await getFilePath();
       isComplete = false;
-      RecordMp3.instance.start(recordFilePath, (type) {
-        statusText = "Record error--->$type";
-        setState(() {});
-      });
+      if (recordFilePath != null) {
+        RecordMp3.instance.start(recordFilePath!, (type) {
+          statusText = "Record error--->$type";
+          setState(() {});
+        });
+      }
     } else {
       statusText = "No microphone permission";
     }
@@ -172,14 +172,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  String recordFilePath;
-
-  void play() {
-    if (recordFilePath != null && File(recordFilePath).existsSync()) {
-      AudioPlayer audioPlayer = AudioPlayer();
-      audioPlayer.play(recordFilePath, isLocal: true);
-    }
-  }
+  String? recordFilePath;
 
   int i = 0;
 
